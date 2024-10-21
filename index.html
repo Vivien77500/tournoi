@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche Tournoi</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        img { width: 40px; height: 40px; }
+    </style>
+</head>
+<body>
+
+<h2>Tournoi : Real Madrid vs FC Barcelone vs Manchester City</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Équipes</th>
+            <th>Match 1</th>
+            <th>Match 2</th>
+            <th>Match 3</th>
+            <th>Finale</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><img src="realmadrid.jpg" alt="Real Madrid"> Real Madrid</td>
+            <td><input type="text" placeholder="Score vs FC Barcelone" id="match1-rm"></td>
+            <td><input type="text" placeholder="Score vs Manchester City" id="match2-rm"></td>
+            <td>-</td>
+            <td id="final-rm">-</td>
+        </tr>
+        <tr>
+            <td><img src="fcb.jpg" alt="FC Barcelone"> FC Barcelone</td>
+            <td><input type="text" placeholder="Score vs Real Madrid" id="match1-fcb"></td>
+            <td><input type="text" placeholder="Score vs Manchester City" id="match2-fcb"></td>
+            <td>-</td>
+            <td id="final-fcb">-</td>
+        </tr>
+        <tr>
+            <td><img src="manc.jpg" alt="Manchester City"> Manchester City</td>
+            <td>-</td>
+            <td><input type="text" placeholder="Score vs Real Madrid" id="match1-mc"></td>
+            <td><input type="text" placeholder="Score vs FC Barcelone" id="match2-mc"></td>
+            <td id="final-mc">-</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Buteurs</h3>
+<div id="scorers">
+    <p>Real Madrid : <input type="text" id="scorers-rm" placeholder="Ajouter les buteurs"></p>
+    <p>FC Barcelone : <input type="text" id="scorers-fcb" placeholder="Ajouter les buteurs"></p>
+    <p>Manchester City : <input type="text" id="scorers-mc" placeholder="Ajouter les buteurs"></p>
+</div>
+
+<script>
+    // Ajouter la logique JavaScript pour mettre à jour les résultats des matchs, les points et les buteurs
+</script>
+
+</body>
+</html>
