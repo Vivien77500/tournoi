@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournoi de Football</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        h1 img {
+            width: 200px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        input[type="number"] {
+            width: 50px;
+            margin: 5px;
+            text-align: center;
+        }
+        #finale img {
+            width: 100px;
+            margin: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1><img src="chelles.png" alt="Logo du tournoi"></h1>
+    <h2>Tournoi : Real Madrid, FC Barcelone, Manchester City, Liverpool FC</h2>
+
+    <h3>Matchs</h3>
+    <div>
+        <label>Real Madrid vs FC Barcelone :</label>
+        <input type="number" id="score-rm-fcb" placeholder="RM">
+        <input type="number" id="score-fcb-rm" placeholder="FCB">
+    </div>
+    <div>
+        <label>Manchester City vs Liverpool FC :</label>
+        <input type="number" id="score-mc-lfc" placeholder="MC">
+        <input type="number" id="score-lfc-mc" placeholder="LFC">
+    </div>
+    <div>
+        <label>FC Barcelone vs Manchester City :</label>
+        <input type="number" id="score-fcb-mc" placeholder="FCB">
+        <input type="number" id="score-mc-fcb" placeholder="MC">
+    </div>
+    <div>
+        <label>Real Madrid vs Liverpool FC :</label>
+        <input type="number" id="score-rm-lfc" placeholder="RM">
+        <input type="number" id="score-lfc-rm" placeholder="LFC">
+    </div>
+    <div>
+        <label>Real Madrid vs Manchester City :</label>
+        <input type="number" id="score-rm-mc" placeholder="RM">
+        <input type="number" id="score-mc-rm" placeholder="MC">
+    </div>
+    <div>
+        <label>FC Barcelone vs Liverpool FC :</label>
+        <input type="number" id="score-fcb-lfc" placeholder="FCB">
+        <input type="number" id="score-lfc-fcb" placeholder="LFC">
+    </div>
+
+    <button onclick="updateRanking()">Mettre à jour le classement</button>
+
+    <h3>Finale</h3>
+    <div id="finale">
+        <img id="final-team1-logo" src="" alt="Équipe 1">
+        <span id="final-team1-name"></span> vs 
+        <img id="final-team2-logo" src="" alt="Équipe 2">
+        <span id="final-team2-name"></span>
+    </div>
+
+    <h3>Classement</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Équipe</th>
+                <th>Points</th>
+                <th>Buts Pour (BP)</th>
+                <th>Buts Contre (BC)</th>
+                <th>Goal Average</th>
+            </tr>
+        </thead>
+        <tbody id="ranking-table">
+            <tr>
+                <td>Real Madrid</td>
+                <td id="points-real-madrid">0</td>
+                <td id="bp-real-madrid">0</td>
+                <td id="bc-real-madrid">0</td>
+                <td id="goal-average-real-madrid">0</td>
+            </tr>
+            <tr>
+                <td>FC Barcelone</td>
+                <td id="points-fc-barcelone">0</td>
+                <td id="bp-fc-barcelone">0</td>
+                <td id="bc-fc-barcelone">0</td>
+                <td id="goal-average-fc-barcelone">0</td>
+            </tr>
+            <tr>
+                <td>Manchester City</td>
+                <td id="points-manchester-city">0</td>
+                <td id="bp-manchester-city">0</td>
+                <td id="bc-manchester-city">0</td>
+                <td id="goal-average-manchester-city">0</td>
+            </tr>
+            <tr>
+                <td>Liverpool FC</td>
+                <td id="points-liverpool-fc">0</td>
+                <td id="bp-liverpool-fc">0</td>
+                <td id="bc-liverpool-fc">0</td>
+                <td id="goal-average-liverpool-fc">0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+    let teams = [
+        {name: "Real Madrid", points: 0, bp: 0, bc: 0, logo: "realmadrid.jpg"},
+        {name: "FC Barcelone", points: 0, bp: 0, bc: 0, logo: "fcb.jpg"},
+        {name: "Manchester City", points: 0, bp: 0, bc: 0, logo: "manc.jpg"},
+        {name: "Liverpool FC", points: 0, bp: 0, bc: 0, logo: "lfc.png"}
+    ];
+
+    function updateRanking() {
+        // Réinitialisation des points et des buts
+        teams.forEach(team => {
+            team.points = 0;
+            team.bp = 0;
+            team.bc = 0;
+        });
+
+        // Processus pour chaque match
+        processMatch(teams[0], teams[1], 'score-rm-fcb', 'score-fcb-rm'); // Real Madrid vs FC Barcelone
+        processMatch(teams[2], teams[3], 'score-mc-lfc', 'score-lfc-mc'); // Manchester City vs Liverpool FC
+        processMatch(teams[1], teams[2], 'score-fcb-mc', 'score-mc-fcb'); // FC Barcelone vs Manchester City
+        processMatch(teams[0], teams[3], 'score-rm-lfc', 'score-lfc-rm'); // Real Madrid vs Liverpool FC
+        processMatch(teams[0], teams[2], 'score-rm-mc', 'score-mc-rm');   // Real Madrid vs Manchester City
+        processMatch(teams[1], teams[3], 'score-fcb-lfc', 'score-lfc-fcb'); // FC Barcelone vs Liverpool FC
+
+        // Mise à jour du tableau de classement
+        teams.forEach(team => {
+            document.getElementById(`points-${team.name.toLowerCase().replace(/ /g, '-')}`).textContent = team.points;
+            document.getElementById(`bp-${team.name.toLowerCase().replace(/ /g, '-')}`).textContent = team.bp;
+            document.getElementById(`bc-${team.name.toLowerCase().replace(/ /g, '-')}`).textContent = team.bc;
+            document.getElementById(`goal-average-${team.name.toLowerCase().replace(/ /g, '-')}`).textContent = team.bp - team.bc;
+        });
+
+        // Tri des équipes par points, puis goal average
+        teams.sort((a, b) => b.points - a.points || (b.bp - b.bc) - (a.bp - a.bc));
+
+        // Mise à jour de la finale avec les deux meilleures équipes
+        document.getElementById('final-team1-logo').src = teams[0].logo;
+        document.getElementById('final-team1-name').textContent = teams[0].name;
+        document.getElementById('final-team2-logo').src = teams[1].logo;
+        document.getElementById('final-team2-name').textContent = teams[1].name;
+    }
+
+    function processMatch(team1, team2, score1Id, score2Id) {
+        let score1 = parseInt(document.getElementById(score1Id).value) || 0;
+        let score2 = parseInt(document.getElementById(score2Id).value) || 0;
+
+        if (score1 > score2) {
+            team1.points += 3;
+        } else if (score1 < score2) {
+            team2.points += 3;
+        } else {
+            team1.points += 1;
+            team2.points += 1;
+        }
+
+        team1.bp += score1;
+        team1.bc += score2;
+        team2.bp += score2;
+        team2.bc += score1;
+    }
+    </script>
+</body>
+</html>
