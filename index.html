@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche Tournoi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        table {
+            width: 60%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            margin: 0 auto;
+        }
+        th, td {
+            border: 2px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        td img {
+            width: 60px;
+            height: auto;
+        }
+        #logo-chelles {
+            width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+        .input-score, .input-scorers {
+            width: 50px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .input-scorers {
+            width: 300px;
+        }
+        .finale {
+            background-color: #d4edda;
+            font-weight: bold;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .ranking-table {
+            width: 60%;
+            margin: 20px auto;
+        }
+        .ranking-header {
+            background-color: #ffd700;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Logo Chelles en haut -->
+<img src="chelles.png" alt="Chelles" id="logo-chelles">
+
+<h2>Tournoi: Real Madrid, FC Barcelone, Manchester City, Liverpool FC</h2>
+
+<!-- Tableau pour les matchs -->
+<table>
+    <!-- Entête -->
+    <thead>
+        <tr>
+            <th>Équipe 1</th>
+            <th>Score</th>
+            <th>Équipe 2</th>
+            <th>Score</th>
+            <th>Buteurs</th>
+        </tr>
+    </thead>
+    
+    <!-- Corps du tableau -->
+    <tbody>
+        <!-- Match 1: Real Madrid vs FC Barcelone -->
+        <tr>
+            <td><img src="realmadrid.jpg" alt="Real Madrid"> Real Madrid</td>
+            <td><input type="text" class="input-score" id="score-rm-fcb" oninput="updateFinal()"></td>
+            <td><img src="fcb.jpg" alt="FC Barcelone"> FC Barcelone</td>
+            <td><input type="text" class="input-score" id="score-fcb-rm" oninput="updateFinal()"></td>
+            <td><input type="text" class="input-scorers" placeholder="Buteurs (Real - Barça)" id="buteurs-rm-fcb"></td>
+        </tr>
+        
+        <!-- Match 2: Manchester City vs Liverpool FC -->
+        <tr>
+            <td><img src="manc.jpg" alt="Manchester City"> Manchester City</td>
+            <td><input type="text" class="input-score" id="score-mc-lfc" oninput="updateFinal()"></td>
+            <td><img src="lfc.png" alt="Liverpool FC"> Liverpool FC</td>
+            <td><input type="text" class="input-score" id="score-lfc-mc" oninput="updateFinal()"></td>
+            <td><input type="text" class="input-scorers" placeholder="Buteurs (City - Liverpool)" id="buteurs-mc-lfc"></td>
+        </tr>
+
+        <!-- Match 3: FC Barcelone vs Manchester City -->
+        <tr>
+            <td><img src="fcb.jpg" alt="FC Barcelone"> FC Barcelone</td>
+            <td><input type="text" class="input-score" id="score-fcb-mc" oninput="updateFinal()"></td>
+            <td><img src="manc.jpg" alt="Manchester City"> Manchester City</td>
+            <td><input type="text" class="input-score" id="score-mc-fcb" oninput="updateFinal()"></td>
+            <td><input type="text" class="input-scorers" placeholder="Buteurs (Barça - City)" id="buteurs-fcb-mc"></td>
+        </tr>
+
+        <!-- Match 4: Real Madrid vs Liverpool FC -->
+        <tr>
+            <td><img src="realmadrid.jpg" alt="Real Madrid"> Real Madrid</td>
+            <td><input type="text" class="input-score" id="score-rm-lfc" oninput="updateFinal()"></td>
+            <td><img src="lfc.png" alt="Liverpool FC"> Liverpool FC</td>
+            <td><input type="text" class="input-score" id="score-lfc-rm" oninput="updateFinal()"></td>
+            <td><input type="text" class="input-scorers" placeholder="Buteurs (Real - Liverpool)" id="buteurs-rm-lfc"></td>
+        </tr>
+
+        <!-- Finale -->
+        <tr class="finale">
+            <td colspan="5">Finale (à déterminer en fonction des points)</td>
+        </tr>
+        <tr>
+            <td><img src="realmadrid.jpg" alt="Équipe A" id="final-team1-logo"> <span id="final-team1-name">Équipe A</span></td>
+            <td><input type="text" class="input-score" id="score-final-team1"></td>
+            <td><img src="manc.jpg" alt="Équipe B" id="final-team2-logo"> <span id="final-team2-name">Équipe B</span></td>
+            <td><input type="text" class="input-score" id="score-final-team2"></td>
+            <td><input type="text" class="input-scorers" placeholder="Buteurs de la finale" id="buteurs-finale"></td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Tableau de classement dynamique -->
+<table class="ranking-table">
+    <thead>
+        <tr class="ranking-header">
+            <th>Équipe</th>
+            <th>Points</th>
+            <th>Buts</th>
+            <th>Goal Average</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Real Madrid</td>
+            <td id="points-rm">0</td>
+            <td id="goals-rm">0</td>
+            <td id="goal-average-rm">0</td>
+        </tr>
+        <tr>
+            <td>FC Barcelone</td>
+            <td id="points-fcb">0</td>
+            <td id="goals-fcb">0</td>
+            <td id="goal-average-fcb">0</td>
+        </tr>
+        <tr>
+            <td>Manchester City</td>
+            <td id="points-mc">0</td>
+            <td id="goals-mc">0</td>
+            <td id="goal-average-mc">0</td>
+        </tr>
+        <tr>
+            <td>Liverpool FC</td>
+            <td id="points-lfc">0</td>
+            <td id="goals-lfc">0</td>
+            <td id="goal-average-lfc">0</td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    function updateFinal() {
+        const teams = [
+            { name: "Real Madrid", logo: "realmadrid.jpg", points: 0, goals: 0, goalAverage: 0 },
+            { name: "FC Barcelone", logo: "fcb.jpg", points: 0, goals: 0, goalAverage: 0 },
+            { name: "Manchester City", logo: "manc.jpg", points: 0, goals: 0, goalAverage: 0 },
+            { name: "Liverpool FC", logo: "lfc.png", points: 0, goals: 0, goalAverage: 0 }
+        ];
+
+        // Match 1: Real Madrid vs FC Barcelone
+        let scoreRmFcb = parseInt(document.getElementById('score-rm-fcb').value) || 0;
+        let scoreFcbRm = parseInt(document.getElementById('score-fcb-rm').value) || 0;
+        if (scoreRmFcb > scoreFcbRm) {
+            teams[0].points += 3;
+        } else if (scoreRmFcb < scoreFcbRm) {
+            teams[1].points += 3;
+        } else {
+            teams[0].points += 1;
+            teams[1].points += 1;
+        }
+        teams[0].goals += scoreRmFcb;
+        teams[1].goals += scoreFcbRm;
+
+        // Match 2: Manchester City vs Liverpool FC
+        let scoreMcLfc = parseInt(document.getElementById('score-mc-lfc').value) || 0;
+        let scoreLfcMc = parseInt(document.getElementById('score-lfc-mc').value) || 0;
+        if (scoreMcLfc > scoreLfcMc) {
+            teams[2].points += 3;
+        } else if (scoreMcLfc < scoreLfcMc) {
+            teams[3].points += 3;
+        } else {
+            teams[2].points += 1;
+            teams[3].points += 1;
+        }
+        teams[2].goals += scoreMcLfc;
+        teams[3].goals += scoreLfcMc;
+
+        // Match 3: FC Barcelone vs Manchester City
+        let scoreFcbMc = parseInt(document.getElementById('score-fcb-mc').value) || 0;
+        let scoreMcFcb = parseInt(document.getElementById('score-mc-fcb').value) || 0;
+        if (scoreFcbMc > scoreMcFcb) {
+            teams[1].points += 3;
+        } else if (scoreFcbMc < scoreMcFcb) {
+            teams[2].points += 3;
+        } else {
+            teams[1].points += 1;
+            teams[2].points += 1;
+        }
+        teams[1].goals += scoreFcbMc;
+        teams[2].goals += scoreMcFcb;
+
+        // Match 4: Real Madrid vs Liverpool FC
+        let scoreRmLfc = parseInt(document.getElementById('score-rm-lfc').value) || 0;
+        let scoreLfcRm = parseInt(document.getElementById('score-lfc-rm').value) || 0;
+        if (scoreRmLfc > scoreLfcRm) {
+            teams[0].points += 3;
+        } else if (scoreRmLfc < scoreLfcRm) {
+            teams[3].points += 3;
+        } else {
+            teams[0].points += 1;
+            teams[3].points += 1;
+        }
+        teams[0].goals += scoreRmLfc;
+        teams[3].goals += scoreLfcRm;
+
+        // Mise à jour du goal average
+        teams[0].goalAverage = teams[0].goals - (scoreFcbRm + scoreLfcRm);
+        teams[1].goalAverage = teams[1].goals - (scoreRmFcb + scoreMcFcb);
+        teams[2].goalAverage = teams[2].goals - (scoreRmMc + scoreFcbMc);
+        teams[3].goalAverage = teams[3].goals - (scoreMcLfc + scoreRmLfc);
+
+        // Tri des équipes selon les points et le goal average
+        teams.sort((a, b) => b.points - a.points || b.goalAverage - a.goalAverage);
+
+        // Mise à jour du tableau de classement
+        document.getElementById('points-rm').textContent = teams[0].points;
+        document.getElementById('goals-rm').textContent = teams[0].goals;
+        document.getElementById('goal-average-rm').textContent = teams[0].goalAverage;
+
+        document.getElementById('points-fcb').textContent = teams[1].points;
+        document.getElementById('goals-fcb').textContent = teams[1].goals;
+        document.getElementById('goal-average-fcb').textContent = teams[1].goalAverage;
+
+        document.getElementById('points-mc').textContent = teams[2].points;
+        document.getElementById('goals-mc').textContent = teams[2].goals;
+        document.getElementById('goal-average-mc').textContent = teams[2].goalAverage;
+
+        document.getElementById('points-lfc').textContent = teams[3].points;
+        document.getElementById('goals-lfc').textContent = teams[3].goals;
+        document.getElementById('goal-average-lfc').textContent = teams[3].goalAverage;
+
+        // Mise à jour de la finale
+        document.getElementById('final-team1-logo').src = teams[0].logo;
+        document.getElementById('final-team1-name').textContent = teams[0].name;
+
+        document.getElementById('final-team2-logo').src = teams[1].logo;
+        document.getElementById('final-team2-name').textContent = teams[1].name;
+    }
+</script>
+
+</body>
+</html>
