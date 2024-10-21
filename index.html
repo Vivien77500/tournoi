@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche Tournoi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 2px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        td img {
+            width: 40px;
+            height: 40px;
+        }
+        .match-header {
+            background-color: #ffd700;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .input-score, .input-scorers {
+            width: 50px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .input-scorers {
+            width: 300px;
+        }
+        .finale {
+            background-color: #d4edda;
+            font-weight: bold;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Tournoi: Real Madrid vs FC Barcelone vs Manchester City</h2>
+
+<!-- Tableau pour les matchs -->
+<table>
+    <!-- Entête -->
+    <thead>
+        <tr>
+            <th>Équipe 1</th>
+            <th>Score</th>
+            <th>Équipe 2</th>
+            <th>Score</th>
+            <th>Buteurs</th>
+        </tr>
+    </thead>
+    
+    <!-- Corps du tableau -->
+    <tbody>
+        <!-- Match 1: Real Madrid vs FC Barcelone -->
+        <tr>
+            <td><img src="realmadrid.jpg" alt="Real Madrid"> Real Madrid</td>
+            <td><input type="text" class="input-score" id="score-rm-fcb"></td>
+            <td><img src="fcb.jpg" alt="FC Barcelone"> FC Barcelone</td>
+            <td><input type="text" class="input-score" id="score-fcb-rm"></td>
+            <td><input type="text" class="input-scorers" placeholder="Buteurs (Real - Barça)" id="buteurs-rm-fcb"></td>
+        </tr>
+        
+        <!-- Match 2: FC Barcelone vs Manchester City -->
+        <tr>
+            <td><img src="fcb.jpg" alt="FC Barcelone"> FC Barcelone</td>
+            <td><input type="text" class="input-score" id="score-fcb-mc"></td>
+            <td><img src="manc.jpg" alt="Manchester City"> Manchester City</td>
+            <td><input type="text" class="input-score" id="score-mc-fcb"></td>
+            <td><input type="text" class="input-scorers" placeholder="Buteurs (Barça - City)" id="buteurs-fcb-mc"></td>
+        </tr>
+
+        <!-- Match 3: Manchester City vs Real Madrid -->
+        <tr>
+            <td><img src="manc.jpg" alt="Manchester City"> Manchester City</td>
+            <td><input type="text" class="input-score" id="score-mc-rm"></td>
+            <td><img src="realmadrid.jpg" alt="Real Madrid"> Real Madrid</td>
+            <td><input type="text" class="input-score" id="score-rm-mc"></td>
+            <td><input type="text" class="input-scorers" placeholder="Buteurs (City - Real)" id="buteurs-mc-rm"></td>
+        </tr>
+
+        <!-- Finale -->
+        <tr class="finale">
+            <td colspan="5">Finale (à déterminer en fonction des points)</td>
+        </tr>
+        <tr>
+            <td><img src="realmadrid.jpg" alt="Équipe A" id="final-team1-logo"> <span id="final-team1-name">Équipe A</span></td>
+            <td><input type="text" class="input-score" id="score-final-team1"></td>
+            <td><img src="manc.jpg" alt="Équipe B" id="final-team2-logo"> <span id="final-team2-name">Équipe B</span></td>
+            <td><input type="text" class="input-score" id="score-final-team2"></td>
+            <td><input type="text" class="input-scorers" placeholder="Buteurs de la finale" id="buteurs-finale"></td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    // Ajoute ici la logique JavaScript pour déterminer la finale, calculer les points et ajouter les buteurs
+</script>
+
+</body>
+</html>
