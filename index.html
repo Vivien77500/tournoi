@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Tournoi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 20px;
+        }
+        h2 {
+            text-align: center;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        .buteur-tag {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 5px;
+            margin: 2px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .suggestions {
+            border: 1px solid #ccc;
+            max-height: 100px;
+            overflow-y: auto;
+            position: absolute;
+            background-color: white;
+            z-index: 1000;
+            display: none;
+        }
+        .suggestions div {
+            padding: 5px;
+            cursor: pointer;
+        }
+        .suggestions div:hover {
+            background-color: #f0f0f0;
+        }
+        #classement {
+            margin-top: 20px;
+            width: 60%;
+            margin: 20px auto;
+        }
+        .score-input {
+            width: 50px;
+        }
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Tableau de Tournoi</h2>
+
+    <table id="matches">
+        <thead>
+            <tr>
+                <th>Match</th>
+                <th>Score</th>
+                <th>Buteurs</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Real Madrid vs Manchester City</td>
+                <td>
+                    <input type="number" class="score-input" id="score-rm-mc" placeholder="RM" min="0" onchange="updateClassement()">
+                    -
+                    <input type="number" class="score-input" id="score-mc-rm" placeholder="MC" min="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <input type="text" oninput="showSuggestions(this)" placeholder="Buteurs" autocomplete="off">
+                    <div class="suggestions"></div>
+                    <div class="tag-container"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>FC Barcelone vs Liverpool FC</td>
+                <td>
+                    <input type="number" class="score-input" id="score-fcb-lfc" placeholder="FCB" min="0" onchange="updateClassement()">
+                    -
+                    <input type="number" class="score-input" id="score-lfc-fcb" placeholder="LFC" min="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <input type="text" oninput="showSuggestions(this)" placeholder="Buteurs" autocomplete="off">
+                    <div class="suggestions"></div>
+                    <div class="tag-container"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>Real Madrid vs FC Barcelone</td>
+                <td>
+                    <input type="number" class="score-input" id="score-rm-fcb" placeholder="RM" min="0" onchange="updateClassement()">
+                    -
+                    <input type="number" class="score-input" id="score-fcb-rm" placeholder="FCB" min="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <input type="text" oninput="showSuggestions(this)" placeholder="Buteurs" autocomplete="off">
+                    <div class="suggestions"></div>
+                    <div class="tag-container"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>Manchester City vs Liverpool FC</td>
+                <td>
+                    <input type="number" class="score-input" id="score-mc-lfc" placeholder="MC" min="0" onchange="updateClassement()">
+                    -
+                    <input type="number" class="score-input" id="score-lfc-mc" placeholder="LFC" min="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <input type="text" oninput="showSuggestions(this)" placeholder="Buteurs" autocomplete="off">
+                    <div class="suggestions"></div>
+                    <div class="tag-container"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>FC Barcelone vs Manchester City</td>
+                <td>
+                    <input type="number" class="score-input" id="score-fcb-mc" placeholder="FCB" min="0" onchange="updateClassement()">
+                    -
+                    <input type="number" class="score-input" id="score-mc-fcb" placeholder="MC" min="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <input type="text" oninput="showSuggestions(this)" placeholder="Buteurs" autocomplete="off">
+                    <div class="suggestions"></div>
+                    <div class="tag-container"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>Real Madrid vs Liverpool FC</td>
+                <td>
+                    <input type="number" class="score-input" id="score-rm-lfc" placeholder="RM" min="0" onchange="updateClassement()">
+                    -
+                    <input type="number" class="score-input" id="score-lfc-rm" placeholder="LFC" min="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <input type="text" oninput="showSuggestions(this)" placeholder="Buteurs" autocomplete="off">
+                    <div class="suggestions"></div>
+                    <div class="tag-container"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Classement</h2>
+    <table id="classement">
+        <thead>
+            <tr>
+                <th>Équipe</th>
+                <th>Points</th>
+                <th>Buts Pour</th>
+                <th>Buts Contre</th>
+                <th>Différence de Buts</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Real Madrid</td>
+                <td class="points">0</td>
+                <td class="bp">0</td>
+                <td class="bc">0</td>
+                <td class="diff">0</td>
+            </tr>
+            <tr>
+                <td>FC Barcelone</td>
+                <td class="points">0</td>
+                <td class="bp">0</td>
+                <td class="bc">0</td>
+                <td class="diff">0</td>
+            </tr>
+            <tr>
+                <td>Manchester City</td>
+                <td class="points">0</td>
+                <td class="bp">0</td>
+                <td class="bc">0</td>
+                <td class="diff">0</td>
+            </tr>
+            <tr>
+                <td>Liverpool FC</td>
+                <td class="points">0</td>
+                <td class="bp">0</td>
+                <td class="bc">0</td>
+                <td class="diff">0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Classement des Buteurs</h2>
+    <table id="classement-buteurs">
+        <thead>
+            <tr>
+                <th>Buteur</th>
+                <th>Équipe</th>
+                <th>Buts</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Aaron Esnard Le Foll</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Aaron Kae</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Aboubakar Ait Kassou</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Adam Redissi</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Adil Lalaoui</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Amine BENBOUBKER</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Assane Fadika</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Aurélien Achard</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Axel Aggar</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>BRADLEY WOLOKO LIPETA</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Charle Mendes</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Elijah Banzulu</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Emmanuel Makkaya</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Erwann Pierre</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Ethan Henriet</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Ethan Tomas Espejo</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Farhan SOUMANOU</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Hosiya</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Ilyes Aissi</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Imed Hassan</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Imran Ben yahia</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Isaac Sogo</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Junayd Bourezgui</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Kayis Amari</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Kiany Babelana Matondo</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Kyliane Kibuku</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>LOUCAS ASSABBANE</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Lemiere Laiky</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Lenny Exumat</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Lenyh Delegove-Vally</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Liam Faria</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Manyl BOUBRIT</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Mathis Sidhoumi</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Mohamed Rakhaoui</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Naïl Mehdi</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Noham Ksia</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Rafael Esteves</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Raphaël YOU KHOU</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Ryad Mayass</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Ryan Badawy</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Ryan Chaabi</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Said Hassan Akbas</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Sivarasa Habishan & Kishan</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Soulayman Mhamdi</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Thaïs Ntone</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Théo Daigueperce</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Tiago Gendarme</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Tohiniaina ANDRITSIZEHENA</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Valentin Cherel</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>WILLIAM DAMBRUN</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Yacine Touati</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Yani Aylan Bouchelkia</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+            <tr>
+                <td>Yanis MEHDI</td>
+                <td></td>
+                <td class="buts">0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        const suggestions = [
+            "Aaron Esnard Le Foll", "Aaron Kae", "Aboubakar Ait Kassou", "Adam Redissi", 
+            "Adil Lalaoui", "Amine BENBOUBKER", "Assane Fadika", "Aurélien Achard", 
+            "Axel Aggar", "BRADLEY WOLOKO LIPETA", "Charle Mendes", "Elijah Banzulu", 
+            "Emmanuel Makkaya", "Erwann Pierre", "Ethan Henriet", "Ethan Tomas Espejo", 
+            "Farhan SOUMANOU", "Hosiya", "Ilyes Aissi", "Imed Hassan", "Imran Ben yahia", 
+            "Isaac Sogo", "Junayd Bourezgui", "Kayis Amari", "Kiany Babelana Matondo", 
+            "Kyliane Kibuku", "LOUCAS ASSABBANE", "Lemiere Laiky", "Lenny Exumat", 
+            "Lenyh Delegove-Vally", "Liam Faria", "Manyl BOUBRIT", "Mathis Sidhoumi", 
+            "Mohamed Rakhaoui", "Naïl Mehdi", "Noham Ksia", "Rafael Esteves", 
+            "Raphaël YOU KHOU", "Ryad Mayass", "Ryan Badawy", "Ryan Chaabi", 
+            "Said Hassan Akbas", "Sivarasa Habishan & Kishan", "Soulayman Mhamdi", 
+            "Thaïs Ntone", "Théo Daigueperce", "Tiago Gendarme", 
+            "Tohiniaina ANDRITSIZEHENA", "Valentin Cherel", "WILLIAM DAMBRUN", 
+            "Yacine Touati", "Yani Aylan Bouchelkia", "Yanis MEHDI"
+        ];
+
+        function showSuggestions(input) {
+            const suggestionBox = input.nextElementSibling;
+            const query = input.value.toLowerCase();
+            suggestionBox.innerHTML = '';
+            if (query) {
+                const filteredSuggestions = suggestions.filter(s => s.toLowerCase().includes(query));
+                filteredSuggestions.forEach(suggestion => {
+                    const div = document.createElement('div');
+                    div.textContent = suggestion;
+                    div.onclick = () => selectButeur(suggestion, input);
+                    suggestionBox.appendChild(div);
+                });
+                suggestionBox.style.display = filteredSuggestions.length ? 'block' : 'none';
+            } else {
+                suggestionBox.style.display = 'none';
+            }
+        }
+
+        function selectButeur(buteur, input) {
+            const tagContainer = input.parentElement.querySelector('.tag-container');
+            const tag = document.createElement('div');
+            tag.className = 'buteur-tag';
+            tag.textContent = buteur;
+            tag.onclick = () => {
+                tagContainer.removeChild(tag);
+                updateButeurCount(buteur, -1);  // Soustraction du but
+            };
+            tagContainer.appendChild(tag);
+            input.value = ''; // Effacer le champ de saisie
+            suggestionBox.style.display = 'none';
+            updateButeurCount(buteur, 1);  // Ajout du but
+        }
+
+        function updateButeurCount(buteur, increment) {
+            const rows = document.querySelectorAll('#classement-buteurs tbody tr');
+            rows.forEach(row => {
+                if (row.cells[0].textContent === buteur) {
+                    const butsCell = row.cells[2];
+                    butsCell.textContent = parseInt(butsCell.textContent) + increment;
+                }
+            });
+        }
+
+        function updateClassement() {
+            const teams = ['Real Madrid', 'FC Barcelone', 'Manchester City', 'Liverpool FC'];
+            teams.forEach(team => {
+                const scoreFor = parseInt(document.getElementById(`score-${team.toLowerCase().replace(/ /g, '-')}-mc`).value) || 0;
+                const scoreAgainst = parseInt(document.getElementById(`score-mc-${team.toLowerCase().replace(/ /g, '-')}`).value) || 0;
+
+                // Mise à jour des buts pour et contre
+                const pointsCell = document.querySelector(`#classement tbody tr:nth-child(${teams.indexOf(team) + 1}) .points`);
+                const bpCell = document.querySelector(`#classement tbody tr:nth-child(${teams.indexOf(team) + 1}) .bp`);
+                const bcCell = document.querySelector(`#classement tbody tr:nth-child(${teams.indexOf(team) + 1}) .bc`);
+                const diffCell = document.querySelector(`#classement tbody tr:nth-child(${teams.indexOf(team) + 1}) .diff`);
+
+                const totalPoints = scoreFor > scoreAgainst ? 3 : scoreFor === scoreAgainst ? 1 : 0;
+                pointsCell.textContent = parseInt(pointsCell.textContent) + totalPoints;
+                bpCell.textContent = parseInt(bpCell.textContent) + scoreFor;
+                bcCell.textContent = parseInt(bcCell.textContent) + scoreAgainst;
+                diffCell.textContent = parseInt(bpCell.textContent) - parseInt(bcCell.textContent);
+            });
+        }
+    </script>
+</body>
+</html>
