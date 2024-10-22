@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournoi de Football</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        h1 img {
+            width: 200px;
+        }
+        table {
+            width: 70%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            border: 2px solid #ddd;
+        }
+        table, th, td {
+            border: 2px solid #ddd;
+            padding: 10px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        td {
+            text-align: center;
+        }
+        input[type="number"], input[type="text"] {
+            width: 50px;
+            padding: 5px;
+            font-size: 16px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .buteurs {
+            width: 150px;
+        }
+        .team-logo {
+            width: 40px;
+            vertical-align: middle;
+        }
+        .team-name {
+            font-weight: bold;
+            padding-right: 10px;
+        }
+        .buteur-list {
+            margin: 5px;
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+        .buteur-suggestion {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            width: 150px;
+            z-index: 100;
+            cursor: pointer;
+        }
+        .buteur-suggestion div {
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        .buteur-suggestion div:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1><img src="chelles.png" alt="Logo du tournoi"></h1>
+    <h2>Tournoi de Football</h2>
+
+    <!-- Tableau des confrontations -->
+    <table>
+        <thead>
+            <tr>
+                <th>Match</th>
+                <th>Score</th>
+                <th>Buteurs</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Match 1: Real Madrid vs Manchester City -->
+            <tr>
+                <td>
+                    <img class="team-logo" src="realmadrid.jpg" alt="Real Madrid"> 
+                    Real Madrid 
+                    <span>vs</span> 
+                    Manchester City 
+                    <img class="team-logo" src="manc.jpg" alt="Manchester City">
+                </td>
+                <td>
+                    <input type="number" id="score-rm-mc" placeholder="0" onchange="updateClassement()"> - 
+                    <input type="number" id="score-mc-rm" placeholder="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <div class="buteur-list">
+                        <input type="text" class="buteurs" placeholder="Buteurs" oninput="showSuggestions(this)">
+                        <div class="buteur-suggestion"></div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- Match 2: FC Barcelone vs Liverpool FC -->
+            <tr>
+                <td>
+                    <img class="team-logo" src="fcb.jpg" alt="FC Barcelone"> 
+                    FC Barcelone 
+                    <span>vs</span> 
+                    Liverpool FC 
+                    <img class="team-logo" src="lfc.png" alt="Liverpool FC">
+                </td>
+                <td>
+                    <input type="number" id="score-fcb-lfc" placeholder="0" onchange="updateClassement()"> - 
+                    <input type="number" id="score-lfc-fcb" placeholder="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <div class="buteur-list">
+                        <input type="text" class="buteurs" placeholder="Buteurs" oninput="showSuggestions(this)">
+                        <div class="buteur-suggestion"></div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- Add more matches as necessary... -->
+        </tbody>
+    </table>
+
+    <!-- Tableau de classement -->
+    <h2>Classement</h2>
+    <table id="classement">
+        <thead>
+            <tr>
+                <th>Équipe</th>
+                <th>Pts</th>
+                <th>BP</th>
+                <th>BC</th>
+                <th>GA</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Real Madrid</td>
+                <td id="points-rm">0</td>
+                <td id="bp-rm">0</td>
+                <td id="bc-rm">0</td>
+                <td id="ga-rm">0</td>
+            </tr>
+            <tr>
+                <td>FC Barcelone</td>
+                <td id="points-fcb">0</td>
+                <td id="bp-fcb">0</td>
+                <td id="bc-fcb">0</td>
+                <td id="ga-fcb">0</td>
+            </tr>
+            <!-- Add more teams as necessary... -->
+        </tbody>
+    </table>
+
+    <!-- Classement des buteurs -->
+    <h2>Classement des Buteurs</h2>
+    <table id="classement-buteurs">
+        <thead>
+            <tr>
+                <th>Joueur</th>
+                <th>Buts</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Classement dynamically updated -->
+        </tbody>
+    </table>
+
+    <script>
+        const buteursList = [
+            "Aaron Esnard Le Foll", "Aaron Kae", "Aboubakar Ait Kassou", "Adam Redissi", "Adil Lalaoui", 
+            "Amine BENBOUBKER", "Assane Fadika", "Aurélien Achard", "Axel Aggar", "BRADLEY WOLOKO LIPETA", 
+            "Charle Mendes", "Elijah Banzulu", "Emmanuel Makkaya", "Erwann Pierre", "Ethan Henriet", 
+            "Ethan Tomas Espejo", "Farhan SOUMANOU", "Hosiya", "Ilyes Aissi", "Imed Hassan", "Imran Ben yahia", 
+            "Isaac Sogo", "Junayd Bourezgui", "Kayis Amari", "Kiany Babelana Matondo", "Kyliane Kibuku", 
+            "LOUCAS ASSABBANE", "Lemiere Laiky", "Lenny Exumat", "Lenyh Delegove-Vally", "Liam Faria", 
+            "Manyl BOUBRIT", "Mathis Sidhoumi", "Mohamed Rakhaoui", "Naïl Mehdi", "Noham Ksia", 
+            "Rafael Esteves", "Raphaël YOU KHOU", "Ryad Mayass", "Ryan Badawy", "Ryan Chaabi", 
+            "Said Hassan Akbas", "Sivarasa Habishan & Kishan", "Soulayman Mhamdi", "Thaïs Ntone", 
+            "Théo Daigueperce", "Tiago Gendarme", "Tohiniaina ANDRITSIZEHENA", "Valentin Cherel", 
+            "WILLIAM DAMBRUN", "Yacine Touati", "Yani Aylan Bouchelkia", "Yanis MEHDI"
+        ];
+
+        const buteursCount = {};
+
+        function showSuggestions(input) {
+            const suggestionBox = input.nextElementSibling;
+            const filter = input.value.toLowerCase();
+            suggestionBox.innerHTML = '';
+
+            if (filter.length > 0) {
+                buteursList.forEach(buteur => {
+                    if (buteur.toLowerCase().includes(filter)) {
+                        const suggestion = document.createElement('div');
+                        suggestion.textContent = buteur;
+                        suggestion.onclick = () => addButeur(input, buteur);
+                        suggestionBox.appendChild(suggestion);
+                    }
+                });
+            }
+        }
+
+        function addButeur(input, buteur) {
+            if (!buteursCount[buteur]) {
+                buteursCount[buteur] = 0;
+            }
+            buteursCount[buteur]++;
+            input.value = ''; // Clear the input field
+
+            updateButeursClassement();
+        }
+
+        function updateButeursClassement() {
+            const tbody = document.getElementById('classement-buteurs').querySelector('tbody');
+            tbody.innerHTML = '';
+
+            for (const buteur in buteursCount) {
+                const row = document.createElement('tr');
+                const nameCell = document.createElement('td');
+                const goalsCell = document.createElement('td');
+
+                nameCell.textContent = buteur;
+                goalsCell.textContent = buteursCount[buteur];
+
+                row.appendChild(nameCell);
+                row.appendChild(goalsCell);
+                tbody.appendChild(row);
+            }
+        }
+
+        // Fonction pour mettre à jour le classement en fonction des scores
+        function updateClassement() {
+            // ... code to update the team rankings based on scores entered ...
+        }
+    </script>
+</body>
+</html>
