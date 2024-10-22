@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournoi de Football</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        h1 img {
+            width: 200px;
+        }
+        table {
+            width: 70%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            border: 2px solid #ddd;
+        }
+        table, th, td {
+            border: 2px solid #ddd;
+            padding: 10px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        td {
+            text-align: center;
+        }
+        input[type="number"], input[type="text"] {
+            width: 50px;
+            padding: 5px;
+            font-size: 16px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .buteurs {
+            width: 150px;
+        }
+        .team-logo {
+            width: 40px;
+            vertical-align: middle;
+        }
+        .team-name {
+            font-weight: bold;
+            padding-right: 10px;
+        }
+        .buteur-list {
+            margin: 5px;
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+        .buteur-suggestion {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            width: 150px;
+            z-index: 100;
+            cursor: pointer;
+        }
+        .buteur-suggestion div {
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        .buteur-suggestion div:hover {
+            background-color: #f0f0f0;
+        }
+        .buteur-tag {
+            display: inline-block;
+            margin: 2px;
+            padding: 5px 10px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1><img src="chelles.png" alt="Logo du tournoi"></h1>
+    <h2>Tournoi de Football</h2>
+
+    <!-- Tableau des confrontations -->
+    <table>
+        <thead>
+            <tr>
+                <th>Match</th>
+                <th>Score</th>
+                <th>Buteurs</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Match 1: Real Madrid vs Manchester City -->
+            <tr>
+                <td>
+                    <img class="team-logo" src="realmadrid.jpg" alt="Real Madrid"> 
+                    Real Madrid 
+                    <span>vs</span> 
+                    Manchester City 
+                    <img class="team-logo" src="manc.jpg" alt="Manchester City">
+                </td>
+                <td>
+                    <input type="number" id="score-rm-mc" placeholder="0" onchange="updateClassement()"> - 
+                    <input type="number" id="score-mc-rm" placeholder="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <div class="buteur-list">
+                        <input type="text" class="buteurs" placeholder="Buteurs" oninput="showSuggestions(this)">
+                        <div class="buteur-suggestion"></div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- Match 2: FC Barcelone vs Liverpool FC -->
+            <tr>
+                <td>
+                    <img class="team-logo" src="fcb.jpg" alt="FC Barcelone"> 
+                    FC Barcelone 
+                    <span>vs</span> 
+                    Liverpool FC 
+                    <img class="team-logo" src="lfc.png" alt="Liverpool FC">
+                </td>
+                <td>
+                    <input type="number" id="score-fcb-lfc" placeholder="0" onchange="updateClassement()"> - 
+                    <input type="number" id="score-lfc-fcb" placeholder="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <div class="buteur-list">
+                        <input type="text" class="buteurs" placeholder="Buteurs" oninput="showSuggestions(this)">
+                        <div class="buteur-suggestion"></div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- Match 3: Real Madrid vs FC Barcelone -->
+            <tr>
+                <td>
+                    <img class="team-logo" src="realmadrid.jpg" alt="Real Madrid"> 
+                    Real Madrid 
+                    <span>vs</span> 
+                    FC Barcelone 
+                    <img class="team-logo" src="fcb.jpg" alt="FC Barcelone">
+                </td>
+                <td>
+                    <input type="number" id="score-rm-fcb" placeholder="0" onchange="updateClassement()"> - 
+                    <input type="number" id="score-fcb-rm" placeholder="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <div class="buteur-list">
+                        <input type="text" class="buteurs" placeholder="Buteurs" oninput="showSuggestions(this)">
+                        <div class="buteur-suggestion"></div>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- Match 4: Manchester City vs Liverpool FC -->
+            <tr>
+                <td>
+                    <img class="team-logo" src="manc.jpg" alt="Manchester City"> 
+                    Manchester City 
+                    <span>vs</span> 
+                    Liverpool FC 
+                    <img class="team-logo" src="lfc.png" alt="Liverpool FC">
+                </td>
+                <td>
+                    <input type="number" id="score-mc-lfc" placeholder="0" onchange="updateClassement()"> - 
+                    <input type="number" id="score-lfc-mc" placeholder="0" onchange="updateClassement()">
+                </td>
+                <td>
+                    <div class="buteur-list">
+                        <input type="text" class="buteurs" placeholder="Buteurs" oninput="showSuggestions(this)">
+                        <div class="buteur-suggestion"></div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Tableau de classement -->
+    <h2>Classement</h2>
+    <table id="classement">
+        <thead>
+            <tr>
+                <th>Équipe</th>
+                <th>Pts</th>
+                <th>BP</th>
+                <th>BC</th>
+                <th>GA</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Real Madrid</td>
+                <td id="points-rm">0</td>
+                <td id="bp-rm">0</td>
+                <td id="bc-rm">0</td>
+                <td id="ga-rm">0</td>
+            </tr>
+            <tr>
+                <td>FC Barcelone</td>
+                <td id="points-fcb">0</td>
+                <td id="bp-fcb">0</td>
+                <td id="bc-fcb">0</td>
+                <td id="ga-fcb">0</td>
+            </tr>
+            <tr>
+                <td>Manchester City</td>
+                <td id="points-mc">0</td>
+                <td id="bp-mc">0</td>
+                <td id="bc-mc">0</td>
+                <td id="ga-mc">0</td>
+            </tr>
+            <tr>
+                <td>Liverpool FC</td>
+                <td id="points-lfc">0</td>
+                <td id="bp-lfc">0</td>
+                <td id="bc-lfc">0</td>
+                <td id="ga-lfc">0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Classement des buteurs -->
+    <h2>Classement des Buteurs</h2>
+    <table id="classement-buteurs">
+        <thead>
+            <tr>
+                <th>Buteur</th>
+                <th>Buts</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamically updated list of scorers -->
+        </tbody>
+    </table>
+
+    <script>
+        const buteurs = ["Aaron Esnard Le Foll", "Aaron Kae", "Aboubakar Ait Kassou", "Adam Redissi", "Adil Lalaoui", "Amine BENBOUBKER", "Assane Fadika", "Aurélien Achard", "Axel Aggar", "BRADLEY WOLOKO LIPETA", "Charle Mendes", "Elijah Banzulu", "Emmanuel Makkaya", "Erwann Pierre", "Ethan Henriet", "Ethan Tomas Espejo", "Farhan SOUMANOU", "Hosiya", "Ilyes Aissi", "Imed Hassan", "Imran Ben yahia", "Isaac Sogo", "Junayd Bourezgui", "Kayis Amari", "Kiany Babelana Matondo", "Kyliane Kibuku", "LOUCAS ASSABBANE", "Lemiere Laiky", "Lenny Exumat", "Lenyh Delegove-Vally", "Liam Faria", "Manyl BOUBRIT", "Mathis Sidhoumi", "Mohamed Rakhaoui", "Naïl Mehdi", "Noham Ksia", "Rafael Esteves", "Raphaël YOU KHOU", "Ryad Mayass", "Ryan Badawy", "Ryan Chaabi", "Said Hassan Akbas", "Sivarasa Habishan & Kishan", "Soulayman Mhamdi", "Thaïs Ntone", "Théo Daigueperce", "Tiago Gendarme", "Tohiniaina ANDRITSIZEHENA", "Valentin Cherel", "WILLIAM DAMBRUN", "Yacine Touati", "Yani Aylan Bouchelkia", "Yanis MEHDI"];
+
+        function showSuggestions(input) {
+            const suggestionsDiv = input.nextElementSibling;
+            const query = input.value.toLowerCase();
+            let suggestions = buteurs.filter(buteur => buteur.toLowerCase().includes(query));
+
+            suggestionsDiv.innerHTML = suggestions.map(buteur => `<div onclick="selectButeur('${buteur}', this)">${buteur}</div>`).join('');
+        }
+
+        function selectButeur(buteur, element) {
+            const parentDiv = element.parentElement;
+            const buteurTag = document.createElement("div");
+            buteurTag.className = "buteur-tag";
+            buteurTag.textContent = buteur;
+            parentDiv.parentElement.insertBefore(buteurTag, parentDiv);
+            parentDiv.innerHTML = '';
+        }
+
+        function updateClassement() {
+            // Logique pour mettre à jour les points, buts pour et contre, goal average
+            // en fonction des scores entrés dans le tableau.
+        }
+
+    </script>
+</body>
+</html>
